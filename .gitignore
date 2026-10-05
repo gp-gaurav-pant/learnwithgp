@@ -13,3 +13,5 @@ wheels/
 # Jupyter
 .ipynb_checkpoints/
 .virtual_documents/
+screenshots/
+.claude/

@@ -19,9 +19,10 @@ augmented_agent_response = augmented_agent.respond(prompt)
 
 # Print the agent's response
 print(augmented_agent_response)
-
+print("\nKnowledge source: The agent uses an augmented system-prompt persona (no external knowledge base).")
+print("Persona impact: The professor persona caused the agent to begin its answer with 'Dear students,'.")
 # 4 - Add a comment explaining:
 # - What knowledge the agent likely used to answer the prompt.
 # Ans: Agent will use its training data as no explicit instructions provided.
 # - How the system prompt specifying the persona affected the agent's response.
-# Ans: The persona helps the agent adapt its tone, grammar, and domain-specific knowledge to better answer the question.
+# Ans: The persona helps the agent adapt its tone like answer starting with "Dear student" and domain-specific knowledge to better answer the question.

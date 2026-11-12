@@ -15,7 +15,12 @@ dependencies = [
     "langgraph==1.2.10",
     "langchain-openai==1.4.2",
     "tavily-python==0.7.27",
-    "pandas==2.3.3"
+    "pandas==2.3.3",
+    "chromadb>=1.0.4",
+    "openai>=1.73.0",
+    "pydantic>=2.11.3",
+    "python-dotenv>=1.1.0",
+    "pdfplumber>=0.11.6",
 ]
 
 [dependency-groups]

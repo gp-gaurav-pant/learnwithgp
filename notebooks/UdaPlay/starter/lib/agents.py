@@ -94,12 +94,13 @@ class Agent:
             function_name = call.function.name
             function_args = json.loads(call.function.arguments)
             tool_call_id = call.id
-            # print(f"[Agent] Calling tool: {function_name}({function_args})")
 
             # Find the matching tool
             tool = next((t for t in self.tools if t.name == function_name), None)
             if tool:
                 result = str(tool(**function_args))
+                print(f"[Agent] Response from tool: {function_name} Response: {result}")
+
                 tool_message = ToolMessage(
                     content=json.dumps(result), 
                     tool_call_id=tool_call_id, 

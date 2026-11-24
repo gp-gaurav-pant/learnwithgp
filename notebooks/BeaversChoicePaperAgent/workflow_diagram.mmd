@@ -1,0 +1,28 @@
+flowchart TD
+    A[Customer request + date] --> B(OrchestratorAgent)
+    B -->|1. check stock| C(InventoryAgent)
+    B -->|2. get quote| D(QuotingAgent)
+    B -->|3. place order| E(OrderingAgent)
+
+    C -->|list_catalog tool reads paper_supplies| F[(SQLite database)]
+    C -->|check_stock tool uses get_stock_level| F
+    C -->|list_inventory tool uses get_all_inventory| F
+    C -->|reorder_if_low tool uses get_stock_level + create_transaction| F
+
+    D -->|list_catalog and get_price tools read paper_supplies| F
+    D -->|past_quotes tool uses search_quote_history| F
+
+    E -->|check_finances tool uses generate_financial_report| F
+    E -->|sell_item tool uses get_stock_level| G{Enough stock?}
+    E -->|restock_item tool uses get_supplier_delivery_date + get_cash_balance| I{Enough cash and in time?}
+
+    G -->|Yes| H[Record sale with create_transaction]
+    G -->|No| E
+    I -->|Yes| J[Order from supplier with create_transaction]
+    I -->|No| K[Reject with reason]
+
+    H --> F
+    J --> F
+
+    B -->|4. quote + order outcome| L[Reply to customer]
+    K --> L

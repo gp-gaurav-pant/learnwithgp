@@ -589,23 +589,8 @@ def search_quote_history(search_terms: List[str], limit: int = 5) -> List[Dict]:
 ########################
 
 
-# Set up and load your env parameters and instantiate your model.
-
-
-"""Set up tools for your agents to use, these should be methods that combine the database functions above
- and apply criteria to them to ensure that the flow of the system is correct."""
-
-
-# Tools for inventory agent
-
-
-# Tools for quoting agent
-
-
-# Tools for ordering agent
-
-
-# Set up your agents and create an orchestration agent that will manage them.
+# The agents live in agent.py (tools in tools.py, types in schema.py). They import this file for the
+# database helpers, so agent.py is imported inside run_test_scenarios() to avoid a circular import.
 
 
 # Run your test scenarios by writing them here. Make sure to keep track of them.
@@ -613,7 +598,9 @@ def search_quote_history(search_terms: List[str], limit: int = 5) -> List[Dict]:
 def run_test_scenarios():
     
     print("Initializing Database...")
-    init_database()
+    from agent import MultiAgentSystem
+
+    init_database(db_engine)
     try:
         quote_requests_sample = pd.read_csv("quote_requests_sample.csv")
         quote_requests_sample["request_date"] = pd.to_datetime(
@@ -639,6 +626,8 @@ def run_test_scenarios():
     ############
     ############
 
+    system = MultiAgentSystem()
+
     results = []
     for idx, row in quote_requests_sample.iterrows():
         request_date = row["request_date"].strftime("%Y-%m-%d")
@@ -660,7 +649,16 @@ def run_test_scenarios():
         ############
         ############
 
-        # response = call_your_multi_agent_system(request_with_date)
+        try:
+            response = system.handle(request_with_date, request_date)
+        except Exception as e:
+            # the real error goes to the console; the customer only sees a plain message
+            print(f"Internal processing error for request {idx + 1}: {e}")
+            response = (
+                "Thank you for your request. We couldn't complete it automatically, "
+                "so please contact our sales team to confirm what was processed "
+                "and get an updated quote."
+            )
 
         # Update state
         report = generate_financial_report(request_date)
